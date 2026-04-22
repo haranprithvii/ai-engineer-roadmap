@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Engineer Roadmap — Progress Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e14;
+    --bg-panel: #10151c;
+    --bg-raised: #161d27;
+    --ink: #e8ecf2;
+    --ink-dim: #7a8898;
+    --ink-faint: #3e4858;
+    --accent: #ff4d3d;
+    --accent-soft: rgba(255,77,61,0.14);
+    --mint: #5df7a4;
+    --gold: #ffbe3d;
+    --line: #1f2835;
+    --font-display: 'Fraunces', 'Georgia', serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: var(--bg); }
+  body {
+    font-family: var(--font-mono);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 20% 0%, rgba(255,77,61,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 100%, rgba(93,247,164,0.05) 0%, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  /* top grid paper texture */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+  }
+  main, header, footer { position: relative; z-index: 1; }
+
+  header {
+    padding: 48px 40px 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    max-width: 1400px; margin: 0 auto;
+    gap: 32px; flex-wrap: wrap;
+  }
+  .brand {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    font-style: italic;
+  }
+  .brand .ai {
+    color: var(--accent);
+    font-weight: 700;
+    font-style: normal;
+  }
+  .brand .rm {
+    font-weight: 600;
+    font-style: normal;
+  }
+  .subtitle {
+    color: var(--ink-dim);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-top: 12px;
+  }
+  .stats {
+    display: flex; gap: 32px;
+    font-family: var(--font-mono);
+  }
+  .stat {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .stat-val {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-val.accent { color: var(--accent); }
+  .stat-val.mint { color: var(--mint); }
+  .stat-val.gold { color: var(--gold); }
+  .stat-lab {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+
+  .toolbar {
+    max-width: 1400px;
+    margin: 24px auto 0;
+    display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+  }
+  .btn {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    border: 1px solid var(--ink-faint);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.danger:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+  main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px;
+  }
+
+  .phases {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .phase {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .phase:hover { border-color: var(--ink-faint); }
+  .phase.done { border-color: var(--mint); }
+
+  .phase-head {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 28px;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid transparent;
+    transition: background 0.15s;
+  }
+  .phase.open .phase-head { border-bottom-color: var(--line); }
+  .phase-head:hover { background: var(--bg-raised); }
+  .phase-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+    min-width: 52px;
+  }
+  .phase-title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 600;
+    flex: 1;
+    letter-spacing: -0.01em;
+  }
+  .phase-weeks {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.05em;
+  }
+  .phase-progress {
+    width: 180px;
+    height: 4px;
+    background: var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .phase-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .phase.done .phase-progress-fill { background: var(--mint); }
+  .phase-pct {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 48px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .phase.done .phase-pct { color: var(--mint); }
+  .chevron {
+    color: var(--ink-dim);
+    transition: transform 0.2s;
+    font-size: 18px;
+  }
+  .phase.open .chevron { transform: rotate(90deg); }
+
+  .phase-body {
+    display: none;
+    padding: 24px 28px 28px;
+    background: var(--bg);
+  }
+  .phase.open .phase-body { display: block; }
+
+  .week {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 16px;
+    align-items: start;
+  }
+  .week:last-child { border-bottom: none; }
+  .week-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    padding-top: 3px;
+    min-width: 70px;
+  }
+  .week-body { flex: 1; }
+  .week-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .tasks {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .task {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 4px 0;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .task-label {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .task.done .task-label {
+    color: var(--ink-dim);
+    text-decoration: line-through;
+    text-decoration-color: var(--accent);
+  }
+  .checkbox {
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--ink-faint);
+    background: transparent;
+    flex-shrink: 0;
+    margin-top: 2px;
+    position: relative;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .task:hover .checkbox { border-color: var(--accent); }
+  .task.done .checkbox {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .task.done .checkbox::after {
+    content: '';
+    position: absolute;
+    left: 4px; top: 1px;
+    width: 5px; height: 9px;
+    border: solid var(--bg);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .week-stats {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    text-align: right;
+    min-width: 60px;
+  }
+  .week-stats .count {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--ink);
+    display: block;
+    font-weight: 600;
+  }
+
+  .ascii-rule {
+    font-family: var(--font-mono);
+    color: var(--ink-faint);
+    font-size: 10px;
+    text-align: center;
+    margin: 40px 0;
+    letter-spacing: 0.3em;
+  }
+
+  footer {
+    max-width: 1400px;
+    margin: 80px auto 40px;
+    padding: 32px 40px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-dim);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* print-friendly */
+  @media print {
+    body::before { display: none; }
+    .toolbar, .chevron { display: none; }
+    .phase-body { display: block !important; }
+  }
+
+  @media (max-width: 720px) {
+    header { padding: 32px 20px 16px; }
+    main { padding: 24px 16px; }
+    .phase-head { flex-wrap: wrap; }
+    .phase-progress { width: 100%; order: 10; }
+    .week { grid-template-columns: 1fr; }
+    .week-stats { text-align: left; }
+    .stat-val { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div>
+        <div class="brand"><span class="ai">AI</span> engineer <span class="rm">roadmap</span></div>
+        <div class="subtitle">24 WEEKS · FROM SCRATCH · FULLY FREE · YOUR PROGRESS</div>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-val accent" id="stat-tasks">0</span>
+          <span class="stat-lab">tasks done</span>
+        </div>
+        <div class="stat">
+          <span class="stat-val mint" id="stat-weeks">0</span>
+          <span class="stat-lab">weeks complete</span>
+        </div>
+        <div class="stat">
+          <span class="stat-val gold" id="stat-pct">0%</span>
+          <span class="stat-lab">overall</span>
+        </div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <button class="btn" onclick="expandAll()">Expand all</button>
+      <button class="btn" onclick="collapseAll()">Collapse all</button>
+      <button class="btn" onclick="exportJSON()">Export progress</button>
+      <button class="btn danger" onclick="resetAll()">Reset progress</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="phases" class="phases"></div>
+    <div class="ascii-rule">· · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · ·</div>
+  </main>
+
+  <footer>
+    <div>AI ENGINEER ROADMAP &mdash; PROGRESS PERSISTS LOCALLY IN YOUR BROWSER</div>
+    <div>CLONE / FORK / SHARE &nbsp;·&nbsp; <a href="https://github.com">github</a> &nbsp;·&nbsp; MIT</div>
+  </footer>
+
+<script>
+/* ==== Data: phases -> weeks -> tasks ==== */
+const DATA = [
+  { id: 0, title: "Toolchain & Mindset", weeks: [
+    { w: "Week 0", title: "Setup", tasks: [
+      "Install Python 3.11+ (via uv or miniforge)",
+      "VS Code + Python, Jupyter, GitLens extensions",
+      "Git + GitHub SSH keys set up",
+      "Obsidian installed, vault opened",
+      "Accounts: Kaggle, HuggingFace, Colab, Groq, OpenRouter",
+      "Docker Desktop installed",
+      "Watch: Missing Semester of CS (MIT) — shell + git lectures"
+    ]}
+  ]},
+  { id: 1, title: "Python & CS Foundations", weeks: [
+    { w: "Week 1", title: "Python Fluency", tasks: [
+      "CS50P — complete problem sets",
+      "Write a CLI markdown TOC generator",
+      "Build a scraper with httpx + beautifulsoup4",
+      "Notes: comprehensions, decorators, context managers, dataclasses, type hints"
+    ]},
+    { w: "Week 2", title: "DSA & Git", tasks: [
+      "NeetCode: 7 Array problems",
+      "NeetCode: 7 Hashmap problems",
+      "Learn Git Branching — complete intro & remote levels",
+      "Read 'Oh Shit, Git!?!'",
+      "Make 1 meaningful PR on any repo"
+    ]}
+  ]},
+  { id: 2, title: "Math for ML", weeks: [
+    { w: "Week 3", title: "Linear Algebra & Calculus", tasks: [
+      "3Blue1Brown — Essence of Linear Algebra (all 16)",
+      "3Blue1Brown — Essence of Calculus",
+      "Read Mathematics for ML book, Ch 2, 3, 5",
+      "Implement matrix ops + SVD from scratch in NumPy"
+    ]},
+    { w: "Week 4", title: "Probability, Stats, Info Theory", tasks: [
+      "StatQuest — Stats Fundamentals playlist",
+      "Explore Seeing Theory (Brown U)",
+      "Notebook: visualize Gaussian PDF, entropy, KL divergence",
+      "Derive MLE for a Gaussian on paper"
+    ]}
+  ]},
+  { id: 3, title: "Classical ML", weeks: [
+    { w: "Week 5", title: "Core Algorithms", tasks: [
+      "Andrew Ng ML Specialization — Course 1",
+      "Andrew Ng ML Specialization — Course 2",
+      "ISLP — read Ch 1-4 (regression, classification)",
+      "Build: House Price Predictor (linear → XGBoost)",
+      "Build: Wine Quality Classifier"
+    ]},
+    { w: "Week 6", title: "ML Lifecycle & Evaluation", tasks: [
+      "ISLP — read Ch 5-8",
+      "Google ML Crash Course — complete",
+      "Set up W&B, log every experiment from now on",
+      "Build: MNIST Visualizer (PCA, t-SNE, UMAP)",
+      "Build: Stargazer clustering project",
+      "Read: Rules of ML (Google)"
+    ]}
+  ]},
+  { id: 4, title: "Deep Learning", weeks: [
+    { w: "Week 7", title: "NNs from Scratch", tasks: [
+      "Karpathy — micrograd video",
+      "Re-implement micrograd yourself",
+      "Karpathy — makemore (bigrams, MLP)",
+      "Build: MLP on MNIST in pure NumPy, hit >95%"
+    ]},
+    { w: "Week 8", title: "PyTorch & Architectures", tasks: [
+      "PyTorch tutorials: Tensors, Autograd, NN",
+      "Daniel Bourke — Learn PyTorch in a Day (video, scrub)",
+      "Read ResNet paper",
+      "Build: Hancock (MNIST in PyTorch, >99%)",
+      "Build: Maven (Fashion-MNIST + CNN + aug)"
+    ]},
+    { w: "Week 9", title: "Training + Generative Intro", tasks: [
+      "Read: Karpathy — A Recipe for Training NNs",
+      "Read: Lilian Weng — VAE post",
+      "Read: Lilian Weng — Diffusion Models",
+      "Build: Autoclarity (denoising autoencoder)",
+      "Build: Passenger Prophet (LSTM forecasting)"
+    ]}
+  ]},
+  { id: 5, title: "Transformers & LLMs", weeks: [
+    { w: "Week 10", title: "Attention & Transformer", tasks: [
+      "Read: Attention Is All You Need (slowly, twice)",
+      "Read: Illustrated Transformer (Alammar)",
+      "Watch: Karpathy — Let's build GPT from scratch",
+      "Build: attention head from scratch in NumPy",
+      "Start: nanoGPT on Tiny Shakespeare"
+    ]},
+    { w: "Week 11", title: "Tokenization + Training Lifecycle", tasks: [
+      "Watch: Karpathy — GPT Tokenizer",
+      "Watch: Karpathy — Deep Dive into LLMs (3.5hr)",
+      "Read: Chinchilla paper",
+      "Read: DPO paper",
+      "Build: BPE tokenizer from scratch (minbpe-style)",
+      "Finish nanoGPT training"
+    ]},
+    { w: "Week 12", title: "LLM Engineering", tasks: [
+      "Complete Prompt Engineering Guide (DAIR)",
+      "Read Anthropic prompting docs",
+      "Build: multi-provider LLM wrapper (Groq, Gemini, Ollama)",
+      "Experiment with temperature, top-p, CoT on same task"
+    ]}
+  ]},
+  { id: 6, title: "RAG Engineering", weeks: [
+    { w: "Week 13", title: "RAG Foundations", tasks: [
+      "Read: RAG paper (Lewis 2020)",
+      "LangChain — RAG from Scratch playlist (first 5)",
+      "Read: Jason Liu — RAG is more than embeddings",
+      "Build: Q&A over MCP docs (Qdrant + Haystack + Gemini)"
+    ]},
+    { w: "Week 14", title: "Chunking & Embeddings", tasks: [
+      "Read: Pinecone — Chunking Strategies",
+      "Watch: Greg Kamradt — 5 Levels of Text Splitting",
+      "Browse MTEB leaderboard",
+      "Build: Chunking Shootout (7 strategies + LLM judge + Streamlit)"
+    ]},
+    { w: "Week 15", title: "Advanced Retrieval", tasks: [
+      "Read: HNSW paper",
+      "Read: HyDE paper",
+      "Read: ColBERT paper",
+      "Build: Retrieval Shootout (dense vs BM25 vs hybrid+rerank)"
+    ]}
+  ]},
+  { id: 7, title: "Evaluation & Production", weeks: [
+    { w: "Week 16", title: "Evaluation", tasks: [
+      "Read: Hamel — Your AI Product Needs Evals",
+      "Read: RAGAS paper + docs",
+      "Read: Shreya Shankar — Who Validates the Validators?",
+      "Build: golden dataset (30+ examples) for your Q&A system",
+      "Build: multi-method eval framework (RAGAS + DeepEval + LLM-judge)"
+    ]},
+    { w: "Week 17", title: "Production", tasks: [
+      "FastAPI tutorial — complete",
+      "Read: 12-factor App",
+      "Docker 101 tutorial",
+      "Build: production chatbot (FastAPI + Redis semantic cache + Langfuse)",
+      "Deploy to Fly.io or Railway free tier"
+    ]}
+  ]},
+  { id: 8, title: "Agents & MCP", weeks: [
+    { w: "Week 18", title: "Agent Fundamentals + MCP", tasks: [
+      "Read: Anthropic — Building effective agents (twice)",
+      "Read: ReAct paper",
+      "Read MCP spec + quickstart",
+      "Build: MCP server exposing a real API"
+    ]},
+    { w: "Week 19", title: "CRAG, Adaptive, Security", tasks: [
+      "Read: Corrective RAG paper",
+      "Read: Self-RAG paper",
+      "Read: Adaptive-RAG paper",
+      "Read: OWASP Top 10 for LLMs",
+      "Read: Simon Willison on prompt injection (browse archive)",
+      "Build: CRAG agent with Tavily web-search fallback"
+    ]}
+  ]},
+  { id: 9, title: "Fine-Tuning & Research", weeks: [
+    { w: "Week 20", title: "PEFT", tasks: [
+      "Read: LoRA paper",
+      "Read: QLoRA paper",
+      "HF PEFT cookbook — work through one example",
+      "Build: fine-tune a 3B-8B model (Unsloth + Colab T4)"
+    ]},
+    { w: "Week 21", title: "Distillation, Quantization, Serving", tasks: [
+      "Read: Hinton's Distillation paper",
+      "Run a quantized model locally via Ollama",
+      "Try vLLM for batched inference",
+      "Write up: when do you actually need to fine-tune?"
+    ]},
+    { w: "Week 22", title: "Reading Research", tasks: [
+      "Read: Keshav — How to Read a Paper",
+      "Subscribe to: Raschka, Weng, Willison, The Batch, Interconnects",
+      "Reproduce the main result of one recent paper",
+      "Commit to 1 paper/week from now on (permanent habit)"
+    ]}
+  ]},
+  { id: 10, title: "Capstone & Portfolio", weeks: [
+    { w: "Week 23", title: "Build the Capstone", tasks: [
+      "Pick archetype: Vertical RAG / Multimodal / Agentic / Research / Fine-tune",
+      "Scope down hard — cut in half, then in half",
+      "Ship ugly end-to-end by day 3",
+      "Write evaluation harness BEFORE optimizing",
+      "Iterate only on what moves the metric"
+    ]},
+    { w: "Week 24", title: "Polish + Ship", tasks: [
+      "Rewrite README for recruiter audience",
+      "Architecture diagram (Excalidraw or Mermaid)",
+      "90-sec Loom demo recorded",
+      "Deploy publicly (HF Spaces / Fly / Railway)",
+      "Blog post (dev.to or your site)",
+      "Post on LinkedIn, X, HN Show HN",
+      "Update resume: AI Engineer, not Python dev",
+      "Apply to 10 roles"
+    ]}
+  ]},
+];
+
+/* ==== State ==== */
+const STORAGE_KEY = 'ai-engineer-roadmap.progress.v1';
+let state = {};
+try {
+  state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+} catch (e) { state = {}; }
+
+function taskKey(phaseId, weekIdx, taskIdx) { return `p${phaseId}w${weekIdx}t${taskIdx}`; }
+function isDone(k) { return state[k] === true; }
+
+function persist() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+/* ==== Render ==== */
+const root = document.getElementById('phases');
+
+function render() {
+  root.innerHTML = '';
+  DATA.forEach(phase => {
+    const totalTasks = phase.weeks.reduce((s, w) => s + w.tasks.length, 0);
+    const doneTasks = phase.weeks.reduce((s, w, wi) =>
+      s + w.tasks.filter((_, ti) => isDone(taskKey(phase.id, wi, ti))).length, 0);
+    const pct = totalTasks > 0 ? Math.round(100 * doneTasks / totalTasks) : 0;
+    const allDone = pct === 100;
+
+    const weeksRange = phase.weeks.length === 1
+      ? phase.weeks[0].w
+      : `${phase.weeks[0].w.replace('Week ', 'W')} – ${phase.weeks[phase.weeks.length-1].w.replace('Week ','W')}`;
+
+    const phaseEl = document.createElement('section');
+    phaseEl.className = 'phase' + (allDone ? ' done' : '');
+    phaseEl.innerHTML = `
+      <div class="phase-head" onclick="togglePhase(this)">
+        <div class="phase-num">PHASE ${String(phase.id).padStart(2, '0')}</div>
+        <div class="phase-title">${phase.title}</div>
+        <div class="phase-weeks">${weeksRange}</div>
+        <div class="phase-progress"><div class="phase-progress-fill" style="width:${pct}%"></div></div>
+        <div class="phase-pct">${pct}%</div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="phase-body">
+        ${phase.weeks.map((w, wi) => {
+          const weekDone = w.tasks.filter((_, ti) => isDone(taskKey(phase.id, wi, ti))).length;
+          return `
+            <div class="week">
+              <div class="week-tag">${w.w.toUpperCase().replace(' ','\u00A0')}</div>
+              <div class="week-body">
+                <div class="week-title">${w.title}</div>
+                <ul class="tasks">
+                  ${w.tasks.map((t, ti) => {
+                    const k = taskKey(phase.id, wi, ti);
+                    const done = isDone(k);
+                    return `
+                      <li class="task${done ? ' done' : ''}" data-k="${k}" onclick="toggleTask(this)">
+                        <div class="checkbox"></div>
+                        <div class="task-label">${escapeHtml(t)}</div>
+                      </li>`;
+                  }).join('')}
+                </ul>
+              </div>
+              <div class="week-stats">
+                <span class="count">${weekDone}<span style="color:var(--ink-faint);font-weight:400;">/${w.tasks.length}</span></span>
+                <span>tasks</span>
+              </div>
+            </div>`;
+        }).join('')}
+      </div>
+    `;
+    root.appendChild(phaseEl);
+  });
+  updateStats();
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function togglePhase(head) {
+  head.parentElement.classList.toggle('open');
+}
+
+function toggleTask(el) {
+  const k = el.getAttribute('data-k');
+  state[k] = !isDone(k);
+  persist();
+  // Re-render just this phase's progress — simplest is full render for accurate stats
+  render();
+  // reopen previously open phases
+  document.querySelectorAll('.phase').forEach((p, i) => {
+    if (openState[i]) p.classList.add('open');
+  });
+}
+
+/* Track which phases are open so re-render preserves state */
+let openState = {};
+const observer = new MutationObserver(() => {
+  document.querySelectorAll('.phase').forEach((p, i) => {
+    p.addEventListener('click', () => {
+      openState[i] = p.classList.contains('open');
+    }, { once: false });
+  });
+});
+
+function updateStats() {
+  let total = 0, done = 0, weeksComplete = 0;
+  DATA.forEach(phase => {
+    phase.weeks.forEach((w, wi) => {
+      let weekTotal = w.tasks.length;
+      let weekDone = 0;
+      w.tasks.forEach((_, ti) => {
+        total++;
+        if (isDone(taskKey(phase.id, wi, ti))) { done++; weekDone++; }
+      });
+      if (weekTotal > 0 && weekDone === weekTotal) weeksComplete++;
+    });
+  });
+  const pct = total > 0 ? Math.round(100 * done / total) : 0;
+  document.getElementById('stat-tasks').textContent = done;
+  document.getElementById('stat-weeks').textContent = weeksComplete;
+  document.getElementById('stat-pct').textContent = pct + '%';
+}
+
+function expandAll() {
+  document.querySelectorAll('.phase').forEach((p, i) => {
+    p.classList.add('open'); openState[i] = true;
+  });
+}
+function collapseAll() {
+  document.querySelectorAll('.phase').forEach((p, i) => {
+    p.classList.remove('open'); openState[i] = false;
+  });
+}
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'roadmap-progress.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function resetAll() {
+  if (!confirm('This will clear all your progress from this browser. You cannot undo. Continue?')) return;
+  state = {};
+  persist();
+  render();
+}
+
+render();
+// Open Phase 0 by default
+document.querySelector('.phase')?.classList.add('open');
+openState[0] = true;
+</script>
+</body>
+</html>
