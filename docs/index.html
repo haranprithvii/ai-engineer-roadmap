@@ -349,6 +349,139 @@
     letter-spacing: -0.01em;
   }
 
+  /* GRAPH SECTION */
+  .graph-sec { padding-bottom: 80px; }
+  .graph-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .graph-lede {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 2.2vw, 26px);
+    font-weight: 300;
+    line-height: 1.45;
+    color: var(--ink);
+    margin-bottom: 40px;
+    letter-spacing: -0.01em;
+  }
+  .graph-lede strong { color: var(--accent); font-weight: 600; }
+  .graph-lede code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    padding: 2px 8px;
+    color: var(--mint);
+  }
+  .graph-steps {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 20px;
+    margin-bottom: 32px;
+  }
+  .graph-steps li {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 16px;
+    align-items: start;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+  }
+  .graph-steps li:last-child { border-bottom: 1px solid var(--line); }
+  .step-n {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    font-style: italic;
+    line-height: 1;
+  }
+  .step-t {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .step-d { color: var(--ink-dim); font-size: 13px; line-height: 1.6; }
+  .step-d a { color: var(--accent); text-decoration: none; }
+  .step-d a:hover { text-decoration: underline; }
+  .step-d code {
+    font-family: var(--font-mono); font-size: 0.85em;
+    background: var(--bg-panel); padding: 1px 6px;
+    color: var(--mint);
+  }
+  kbd {
+    font-family: var(--font-mono);
+    background: var(--bg-panel);
+    border: 1px solid var(--ink-faint);
+    border-bottom-width: 2px;
+    padding: 2px 8px;
+    font-size: 11px;
+    color: var(--ink);
+    margin: 0 2px;
+  }
+
+  .graph-viz {
+    aspect-ratio: 1;
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    padding: 16px;
+    position: relative;
+  }
+  .graph-viz::before {
+    content: 'graph.svg';
+    position: absolute;
+    top: 12px; left: 16px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-dim);
+    letter-spacing: 0.1em;
+  }
+  .graph-viz::after {
+    content: 'CMD+G';
+    position: absolute;
+    top: 12px; right: 16px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    border: 1px solid var(--accent);
+    padding: 2px 8px;
+  }
+  .graph-viz svg {
+    width: 100%; height: 100%;
+    animation: spin 60s linear infinite;
+    transform-origin: center;
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .graph-viz svg circle {
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+  .graph-viz svg text {
+    /* counter-rotate labels so they stay readable as the graph spins */
+    animation: counter-spin 60s linear infinite;
+    transform-origin: center;
+            transform-box: fill-box;
+  }
+  @keyframes counter-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+
+  @media (max-width: 820px) {
+    .graph-grid { grid-template-columns: 1fr; gap: 40px; }
+    .graph-viz { max-width: 480px; margin: 0 auto; }
+  }
+
   /* CTA */
   .cta-sec {
     text-align: center;
@@ -407,6 +540,7 @@
     <div class="nav-links">
       <a href="#roadmap">Roadmap</a>
       <a href="#what">What's inside</a>
+      <a href="#graph">Graph</a>
       <a href="#rules">Rules</a>
       <a href="tracker.html">Tracker</a>
       <a href="https://github.com" class="nav-cta">GitHub ↗</a>
@@ -606,9 +740,114 @@
   </ol>
 </section>
 
+<section id="graph" class="graph-sec">
+  <div class="section-head">
+    <span class="section-num">04 / KNOWLEDGE GRAPH</span>
+    <h2>Every concept, <em>connected.</em></h2>
+  </div>
+
+  <div class="graph-grid">
+    <div class="graph-copy">
+      <p class="graph-lede">
+        The repo ships with a pre-built <strong>Obsidian vault</strong> — 175+
+        concept notes, all cross-linked with <code>[[wikilinks]]</code>. Open it
+        in Obsidian and hit one keyboard shortcut to see the entire field of AI
+        engineering as an interactive graph.
+      </p>
+      <ol class="graph-steps">
+        <li>
+          <span class="step-n">01</span>
+          <div>
+            <div class="step-t">Download Obsidian</div>
+            <div class="step-d">Free. macOS / Windows / Linux.
+              <a href="https://obsidian.md/" target="_blank" rel="noopener">obsidian.md ↗</a>
+            </div>
+          </div>
+        </li>
+        <li>
+          <span class="step-n">02</span>
+          <div>
+            <div class="step-t">Open folder as vault</div>
+            <div class="step-d">Point it at <code>obsidian-vault/</code> inside the cloned repo.</div>
+          </div>
+        </li>
+        <li>
+          <span class="step-n">03</span>
+          <div>
+            <div class="step-t">Press <kbd>⌘</kbd>+<kbd>G</kbd> (or <kbd>Ctrl</kbd>+<kbd>G</kbd>)</div>
+            <div class="step-d">Graph view opens. Every concept is a node. Every <code>[[link]]</code> is an edge. Click any node to jump to the note.</div>
+          </div>
+        </li>
+      </ol>
+      <div class="graph-actions">
+        <a href="https://obsidian.md/" target="_blank" rel="noopener" class="btn btn-ghost">
+          Get Obsidian <span class="arrow">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Illustrative SVG of a graph view -->
+    <div class="graph-viz" aria-hidden="true">
+      <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+        <!-- edges -->
+        <g stroke="var(--ink-faint)" stroke-width="1" opacity="0.7">
+          <line x1="250" y1="250" x2="120" y2="140"/>
+          <line x1="250" y1="250" x2="380" y2="130"/>
+          <line x1="250" y1="250" x2="400" y2="290"/>
+          <line x1="250" y1="250" x2="320" y2="410"/>
+          <line x1="250" y1="250" x2="150" y2="380"/>
+          <line x1="250" y1="250" x2="90"  y2="270"/>
+          <line x1="250" y1="250" x2="200" y2="120"/>
+          <line x1="120" y1="140" x2="200" y2="120"/>
+          <line x1="120" y1="140" x2="90"  y2="270"/>
+          <line x1="380" y1="130" x2="400" y2="290"/>
+          <line x1="380" y1="130" x2="200" y2="120"/>
+          <line x1="400" y1="290" x2="320" y2="410"/>
+          <line x1="320" y1="410" x2="150" y2="380"/>
+          <line x1="150" y1="380" x2="90"  y2="270"/>
+          <line x1="90"  y1="270" x2="60"  y2="200"/>
+          <line x1="120" y1="140" x2="60"  y2="200"/>
+          <line x1="200" y1="120" x2="260" y2="70"/>
+          <line x1="380" y1="130" x2="440" y2="200"/>
+          <line x1="400" y1="290" x2="450" y2="360"/>
+          <line x1="320" y1="410" x2="250" y2="460"/>
+          <line x1="150" y1="380" x2="80"  y2="430"/>
+        </g>
+        <!-- nodes -->
+        <g>
+          <circle cx="250" cy="250" r="11" fill="var(--accent)"/>
+          <circle cx="120" cy="140" r="8" fill="var(--mint)"/>
+          <circle cx="380" cy="130" r="8" fill="var(--gold)"/>
+          <circle cx="400" cy="290" r="7" fill="var(--ink)"/>
+          <circle cx="320" cy="410" r="8" fill="var(--accent)"/>
+          <circle cx="150" cy="380" r="6" fill="var(--mint)"/>
+          <circle cx="90"  cy="270" r="7" fill="var(--gold)"/>
+          <circle cx="200" cy="120" r="5" fill="var(--ink)"/>
+          <circle cx="60"  cy="200" r="4" fill="var(--ink-dim)"/>
+          <circle cx="260" cy="70"  r="4" fill="var(--ink-dim)"/>
+          <circle cx="440" cy="200" r="5" fill="var(--ink)"/>
+          <circle cx="450" cy="360" r="4" fill="var(--ink-dim)"/>
+          <circle cx="250" cy="460" r="5" fill="var(--ink)"/>
+          <circle cx="80"  cy="430" r="4" fill="var(--ink-dim)"/>
+        </g>
+        <!-- labels on major nodes -->
+        <g font-family="var(--font-mono)" font-size="10" fill="var(--ink)">
+          <text x="265" y="254">Transformer</text>
+          <text x="130" y="135" fill="var(--mint)">RAG</text>
+          <text x="390" y="128" fill="var(--gold)">Backprop</text>
+          <text x="408" y="293">Agent</text>
+          <text x="330" y="414" fill="var(--accent)">Attention</text>
+          <text x="158" y="384" fill="var(--mint)">LoRA</text>
+          <text x="98"  y="274" fill="var(--gold)">Vector DB</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
 <section class="cta-sec">
-  <div class="cta-head">Start <em>today.</em></div>
-  <div class="cta-sub">It's Tuesday at 9:47 pm. What else were you going to do?</div>
+  <div class="cta-head">Start <em id="cta-when">today.</em></div>
+  <div class="cta-sub" id="cta-sub">What else were you going to do?</div>
   <div class="hero-ctas" style="justify-content: center;">
     <a href="tracker.html" class="btn btn-primary">
       Open the tracker <span class="arrow">→</span>
@@ -618,6 +857,42 @@
     </a>
   </div>
 </section>
+
+<script>
+  // Dynamic CTA time
+  (function() {
+    const now = new Date();
+    const day = now.toLocaleDateString('en-US', { weekday: 'long' });
+    const hour = now.getHours();
+    const min = now.getMinutes();
+    const ampm = hour >= 12 ? 'pm' : 'am';
+    const h12 = ((hour + 11) % 12) + 1;
+    const timeStr = `${h12}:${String(min).padStart(2, '0')} ${ampm}`;
+
+    // Context-aware "when" word
+    let when;
+    if (hour < 5)        when = 'tonight.';
+    else if (hour < 12)  when = 'this morning.';
+    else if (hour < 17)  when = 'this afternoon.';
+    else if (hour < 21)  when = 'tonight.';
+    else                 when = 'tonight.';
+
+    // Day-specific nudges keep it from feeling generic
+    const nudges = {
+      Monday:    "Best day of the week to start something.",
+      Tuesday:   "What else were you going to do?",
+      Wednesday: "Midweek is the perfect time to pick up momentum.",
+      Thursday:  "Two days until the weekend — get ahead of it.",
+      Friday:    "Most people coast. Don't.",
+      Saturday:  "Weekend block: 5 hours, one phase.",
+      Sunday:    "Make next week the one that started it."
+    };
+    const nudge = nudges[day] || "What else were you going to do?";
+
+    document.getElementById('cta-when').textContent = when;
+    document.getElementById('cta-sub').textContent = `It's ${day} at ${timeStr}. ${nudge}`;
+  })();
+</script>
 
 <footer>
   <div>AI ENGINEER ROADMAP · MIT LICENSE · REMIX FREELY</div>
