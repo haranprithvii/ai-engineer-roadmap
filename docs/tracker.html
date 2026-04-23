@@ -96,7 +96,7 @@ window.ROADMAP_CONFIG = {
   .brand-link {
     text-decoration: none;
     color: inherit;
-    display: inline-block;
+    display: block;
     transition: opacity 0.15s;
   }
   .brand-link:hover { opacity: 0.85; }
@@ -897,7 +897,7 @@ window.ROADMAP_CONFIG = {
   }
 </style>
 </head>
-<body>
+<body class="app-hidden">
 
 <header>
   <div class="topbar">
@@ -1875,8 +1875,9 @@ render();
   let sb = null;
   let currentUser = null;
 
-  // If Supabase isn't configured, just show a subtle local-only indicator
+  // If Supabase isn't configured, run in local-only mode (no login gate)
   if (!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY) {
+    document.body.classList.remove('app-hidden');
     authSlot.innerHTML = '<span style="font-size:10px;color:var(--ink-faint);letter-spacing:0.1em;text-transform:uppercase;">Local only</span>';
     return;
   }
