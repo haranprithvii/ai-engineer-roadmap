@@ -7,6 +7,20 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ============================================================
+// SUPABASE CONFIG — replace these with your project values.
+// See SETUP-AUTH.md for step-by-step instructions.
+// If left as empty strings, cloud sync is disabled and the
+// tracker works in local-only mode (current behavior).
+// ============================================================
+window.ROADMAP_CONFIG = {
+  SUPABASE_URL: "",        // e.g. "https://abcdefgh.supabase.co"
+  SUPABASE_ANON_KEY: "",   // starts with "eyJhbGciOiJ..."
+  ENABLE_ANALYTICS: true   // logs anonymous page views even without signup
+};
+</script>
 <style>
   :root {
     --bg: #0a0e14;
@@ -479,8 +493,300 @@
     letter-spacing: 0.05em;
   }
 
+  /* Welcome / gated landing */
+  .welcome-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 60px;
+    align-items: center;
+    padding: 40px 0;
+  }
+  .welcome-title {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+  .welcome-title em {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 700;
+  }
+  .welcome-sub {
+    color: var(--ink-dim);
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 36px;
+    max-width: 520px;
+  }
+  .welcome-features {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 14px;
+    margin-bottom: 28px;
+  }
+  .welcome-features li {
+    display: grid;
+    grid-template-columns: 62px 1fr;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid var(--line);
+  }
+  .welcome-features li:last-child { border-bottom: 1px solid var(--line); }
+  .wf-num {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--accent);
+    line-height: 1;
+    text-align: right;
+  }
+  .wf-txt {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .wf-txt b { font-weight: 700; }
+  .welcome-footer {
+    font-size: 13px;
+    color: var(--ink-dim);
+    line-height: 1.7;
+    padding: 16px 20px;
+    background: var(--bg-panel);
+    border-left: 2px solid var(--accent);
+  }
+  .welcome-footer strong {
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .welcome-auth {
+    position: sticky;
+    top: 20px;
+  }
+  .welcome-auth-inner {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    padding: 32px;
+  }
+  .auth-header {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+    color: var(--ink);
+  }
+  .welcome-trust {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--ink-dim);
+  }
+
+  .app-hidden #app-left,
+  .app-hidden #app-right,
+  .app-hidden .stats,
+  .app-hidden .toolbar .btn {
+    display: none !important;
+  }
+  .app-hidden main {
+    grid-template-columns: 1fr !important;
+  }
+  .app-hidden #welcome-screen { display: block !important; }
+
+  @media (max-width: 900px) {
+    .welcome-grid { grid-template-columns: 1fr; gap: 40px; }
+    .welcome-auth { position: static; }
+  }
+
   .tab-pane { display: none; }
   .tab-pane.active { display: block; }
+
+  .user-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 7px 12px;
+    border: 1px solid var(--mint);
+    color: var(--mint);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.15s;
+  }
+  .user-pill:hover { background: rgba(93,247,164,0.08); }
+  .user-pill .dot {
+    width: 6px; height: 6px;
+    background: var(--mint);
+    border-radius: 50%;
+  }
+  .btn.sync {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .btn.sync:hover { background: var(--accent); color: var(--bg); }
+
+  /* Auth modal */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    max-width: 440px;
+    width: 100%;
+    padding: 32px;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: transparent;
+    border: none;
+    color: var(--ink-dim);
+    cursor: pointer;
+    font-size: 20px;
+    padding: 4px 10px;
+    transition: color 0.15s;
+  }
+  .modal-close:hover { color: var(--accent); }
+  .modal-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .modal-title em { color: var(--accent); font-style: italic; }
+  .modal-sub {
+    color: var(--ink-dim);
+    font-size: 13px;
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .oauth-btn {
+    display: flex; align-items: center; gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--bg);
+    border: 1px solid var(--ink-faint);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: all 0.15s;
+  }
+  .oauth-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--bg-raised);
+  }
+  .oauth-btn svg { flex-shrink: 0; }
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 20px 0;
+    color: var(--ink-dim);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .email-form { display: flex; flex-direction: column; gap: 10px; }
+  .email-form input {
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px solid var(--ink-faint);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .email-form input:focus { border-color: var(--accent); }
+  .email-form button {
+    padding: 12px 16px;
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .email-form button:hover { opacity: 0.85; }
+  .email-form button:disabled { opacity: 0.5; cursor: wait; }
+  .auth-msg {
+    margin-top: 12px;
+    padding: 12px 14px;
+    font-size: 12px;
+    font-family: var(--font-mono);
+    border-left: 2px solid var(--mint);
+    background: rgba(93,247,164,0.06);
+    color: var(--mint);
+    display: none;
+  }
+  .auth-msg.error {
+    border-left-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .auth-msg.active { display: block; }
+  .auth-footer {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 11px;
+    color: var(--ink-dim);
+    line-height: 1.6;
+  }
+  .auth-footer a { color: var(--ink-dim); text-decoration: underline; }
+
+  /* Sync indicator */
+  .sync-toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    padding: 12px 18px;
+    background: var(--bg-panel);
+    border: 1px solid var(--mint);
+    color: var(--mint);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .sync-toast.show { opacity: 1; }
+  .sync-toast.error { border-color: var(--accent); color: var(--accent); }
 
   .lib-section { margin-bottom: 36px; }
   .lib-title {
@@ -579,11 +885,72 @@
     <button class="btn" onclick="expandCurrent()">Jump to current</button>
     <button class="btn" onclick="exportJSON()">Export progress</button>
     <button class="btn danger" onclick="resetAll()">Reset</button>
+    <div id="auth-slot" style="margin-left:auto;"></div>
   </div>
 </header>
 
 <main>
-  <div class="left">
+  <!-- Welcome screen: shown when Supabase is configured & user is not signed in -->
+  <section id="welcome-screen" style="display:none; grid-column: 1 / -1;">
+    <div class="welcome-grid">
+      <div class="welcome-copy">
+        <h1 class="welcome-title">Welcome. <em>Sign in</em> to start.</h1>
+        <p class="welcome-sub">
+          Free forever. No password to remember. Your progress syncs across every device — laptop at night, phone on the train, back to the laptop on Saturday.
+        </p>
+
+        <ul class="welcome-features">
+          <li><span class="wf-num">132</span><span class="wf-txt"><b>Tasks across 24 weeks</b> — from Python basics to shipping a capstone.</span></li>
+          <li><span class="wf-num">146</span><span class="wf-txt"><b>Curated links</b> to the best free videos, papers &amp; courses.</span></li>
+          <li><span class="wf-num">10</span><span class="wf-txt"><b>Phases</b> — toolchain, math, ML, deep learning, transformers, RAG, eval, agents, fine-tuning, capstone.</span></li>
+          <li><span class="wf-num">∞</span><span class="wf-txt"><b>Stay current</b> — live sidebar links to HF papers, Raschka, Interconnects, arXiv.</span></li>
+        </ul>
+
+        <div class="welcome-footer">
+          <strong>Why sign in?</strong> So you can actually pick up where you left off. We only store your email and your progress. Zero spam. Ever.
+        </div>
+      </div>
+
+      <div class="welcome-auth">
+        <div class="welcome-auth-inner">
+          <div class="auth-header">Get started — it takes 5 seconds.</div>
+
+          <button class="oauth-btn" onclick="signInWith('google')">
+            <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
+              <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/>
+              <path fill="#FBBC05" d="M3.964 10.706A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.997 8.997 0 000 9c0 1.452.348 2.827.957 4.038l3.007-2.332z"/>
+              <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.962L3.964 7.294C4.672 5.167 6.656 3.58 9 3.58z"/>
+            </svg>
+            Continue with Google
+          </button>
+
+          <button class="oauth-btn" onclick="signInWith('github')">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            Continue with GitHub
+          </button>
+
+          <div class="divider">or</div>
+
+          <form class="email-form" onsubmit="signInWithEmail(event)">
+            <input type="email" id="welcome-email-input" placeholder="you@example.com" required autocomplete="email">
+            <button type="submit" id="welcome-email-btn">Email me a sign-in link</button>
+          </form>
+
+          <div class="auth-msg" id="welcome-auth-msg"></div>
+
+          <div class="welcome-trust">
+            No password required. Just click the link we email you. We'll remember you next time.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main app shell: hidden until authenticated -->
+  <div class="left" id="app-left">
     <div class="tabs">
       <button class="tab active" data-tab="roadmap" onclick="switchTab(this)">Roadmap &amp; tracker</button>
       <button class="tab" data-tab="library" onclick="switchTab(this)">Full library</button>
@@ -597,7 +964,7 @@
     <div id="tab-projects" class="tab-pane"><div id="projects-list"></div></div>
   </div>
 
-  <aside class="right">
+  <aside class="right" id="app-right">
     <div class="panel">
       <div class="panel-head">
         <span class="panel-title">↯ Stay current</span>
@@ -1456,6 +1823,267 @@ function resetAll() {
 
 if (Object.keys(openState).length === 0) { openState['phase-0'] = true; persist(); }
 render();
+
+/* ============================================================
+   AUTH + CLOUD SYNC (Supabase)
+   All code below is a no-op if SUPABASE_URL is empty.
+   ============================================================ */
+(function() {
+  const cfg = window.ROADMAP_CONFIG || {};
+  const authSlot = document.getElementById('auth-slot');
+  let sb = null;
+  let currentUser = null;
+
+  // If Supabase isn't configured, just show a subtle local-only indicator
+  if (!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY) {
+    authSlot.innerHTML = '<span style="font-size:10px;color:var(--ink-faint);letter-spacing:0.1em;text-transform:uppercase;">Local only</span>';
+    return;
+  }
+
+  sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+
+  // Track anonymous pageview
+  if (cfg.ENABLE_ANALYTICS) {
+    try {
+      sb.from('events').insert({
+        event_type: 'pageview',
+        path: window.location.pathname,
+        referrer: document.referrer || null,
+        user_agent: navigator.userAgent.substring(0, 200)
+      }).then(() => {}, () => {});
+    } catch(e) {}
+  }
+
+  // Check for existing session
+  sb.auth.getSession().then(({ data: { session } }) => {
+    if (session) {
+      currentUser = session.user;
+      onLogin(session.user);
+    } else {
+      showSignInButton();
+    }
+  });
+
+  // Listen for auth state changes (e.g. after magic link redirect)
+  sb.auth.onAuthStateChange((_event, session) => {
+    if (session && session.user) {
+      currentUser = session.user;
+      onLogin(session.user);
+    } else {
+      currentUser = null;
+      showSignInButton();
+    }
+  });
+
+  function showSignInButton() {
+    // Gate the app behind the welcome screen
+    document.body.classList.add('app-hidden');
+    authSlot.innerHTML = '';
+  }
+
+  function showUserPill(user) {
+    document.body.classList.remove('app-hidden');
+    const label = user.email ? user.email.split('@')[0] : 'signed in';
+    authSlot.innerHTML = `
+      <button class="user-pill" onclick="signOut()" title="${user.email || ''} — click to sign out">
+        <span class="dot"></span>
+        <span>${label.substring(0, 18)}</span>
+      </button>
+    `;
+  }
+
+  async function onLogin(user) {
+    showUserPill(user);
+    toast('Signed in — syncing progress');
+    try {
+      // Fetch cloud state
+      const { data, error } = await sb
+        .from('progress')
+        .select('state, open_state, updated_at')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (error) throw error;
+      if (data && data.state) {
+        const cloudState = data.state || {};
+        const cloudOpen = data.open_state || {};
+        // Merge: cloud wins on conflict if cloud has keys we don't have;
+        // locally-checked tasks are preserved too (union)
+        const merged = { ...cloudState, ...state };
+        const mergedOpen = { ...cloudOpen, ...openState };
+        state = merged;
+        openState = mergedOpen;
+        persist();
+        render();
+      }
+      // Push latest (now merged) state back
+      await saveToCloud();
+      await logEvent('login');
+    } catch(e) {
+      console.warn('Cloud sync read failed', e);
+      toast('Cloud sync unavailable', true);
+    }
+  }
+
+  async function saveToCloud() {
+    if (!currentUser) return;
+    try {
+      const payload = {
+        user_id: currentUser.id,
+        state: state,
+        open_state: openState,
+        updated_at: new Date().toISOString()
+      };
+      const { error } = await sb
+        .from('progress')
+        .upsert(payload, { onConflict: 'user_id' });
+      if (error) throw error;
+    } catch(e) {
+      console.warn('Cloud save failed', e);
+    }
+  }
+
+  async function logEvent(type, meta) {
+    try {
+      await sb.from('events').insert({
+        event_type: type,
+        user_id: currentUser ? currentUser.id : null,
+        path: window.location.pathname,
+        meta: meta || null
+      });
+    } catch(e) {}
+  }
+
+  // Debounced autosave on any change
+  let saveTimer;
+  const origPersist = window.persist;
+  window.persist = function() {
+    origPersist();
+    if (currentUser) {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveToCloud, 800);
+    }
+  };
+
+  // Wrap toggleTask to log analytics event
+  const origToggle = window.toggleTask;
+  window.toggleTask = function(k) {
+    origToggle(k);
+    if (currentUser && state[k]) logEvent('task_complete', { key: k });
+  };
+
+  // Public auth fns
+  window.openAuthModal = () => {
+    document.getElementById('auth-modal').classList.add('active');
+  };
+  window.closeAuthModal = () => {
+    document.getElementById('auth-modal').classList.remove('active');
+    document.getElementById('auth-msg').classList.remove('active', 'error');
+  };
+  window.signInWith = async (provider) => {
+    try {
+      const { error } = await sb.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo: window.location.href }
+      });
+      if (error) throw error;
+    } catch(e) {
+      showAuthMsg(e.message || 'Sign-in failed', true);
+    }
+  };
+  window.signInWithEmail = async (evt) => {
+    if (evt) evt.preventDefault();
+    // Welcome screen form takes priority; fall back to modal form
+    const welcomeInput = document.getElementById('welcome-email-input');
+    const modalInput = document.getElementById('email-input');
+    const welcomeBtn = document.getElementById('welcome-email-btn');
+    const modalBtn = document.getElementById('email-btn');
+    const onWelcome = welcomeInput && welcomeInput.offsetParent !== null;
+    const email = (onWelcome ? welcomeInput.value : modalInput.value).trim();
+    const btn = onWelcome ? welcomeBtn : modalBtn;
+    const msgId = onWelcome ? 'welcome-auth-msg' : 'auth-msg';
+    if (!email) return;
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    try {
+      const { error } = await sb.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: window.location.href }
+      });
+      if (error) throw error;
+      showAuthMsg(`Check ${email} for a sign-in link.`, false, msgId);
+      btn.textContent = 'Link sent ✓';
+    } catch(e) {
+      showAuthMsg(e.message || 'Failed to send link', true, msgId);
+      btn.disabled = false;
+      btn.textContent = onWelcome ? 'Email me a sign-in link' : 'Email me a link';
+    }
+  };
+  window.signOut = async () => {
+    if (!confirm('Sign out? Your progress will remain on this device.')) return;
+    await sb.auth.signOut();
+  };
+  function showAuthMsg(text, isError, elId) {
+    const el = document.getElementById(elId || 'auth-msg');
+    if (!el) return;
+    el.textContent = text;
+    el.classList.toggle('error', !!isError);
+    el.classList.add('active');
+  }
+
+  window.toast = (text, isError) => {
+    let el = document.getElementById('sync-toast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'sync-toast';
+      el.className = 'sync-toast';
+      document.body.appendChild(el);
+    }
+    el.textContent = text;
+    el.classList.toggle('error', !!isError);
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2400);
+  };
+})();
 </script>
+
+<div class="modal-overlay" id="auth-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeAuthModal()" aria-label="Close">×</button>
+    <div class="modal-title">Sync across <em>devices.</em></div>
+    <div class="modal-sub">
+      Save your progress to the cloud. Work from your laptop, pick up on your phone. Always free. Never any ads.
+    </div>
+
+    <button class="oauth-btn" onclick="signInWith('google')">
+      <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
+        <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/>
+        <path fill="#FBBC05" d="M3.964 10.706A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.997 8.997 0 000 9c0 1.452.348 2.827.957 4.038l3.007-2.332z"/>
+        <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.962L3.964 7.294C4.672 5.167 6.656 3.58 9 3.58z"/>
+      </svg>
+      Continue with Google
+    </button>
+
+    <button class="oauth-btn" onclick="signInWith('github')">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+      </svg>
+      Continue with GitHub
+    </button>
+
+    <div class="divider">or</div>
+
+    <form class="email-form" onsubmit="signInWithEmail(event)">
+      <input type="email" id="email-input" placeholder="you@example.com" required autocomplete="email">
+      <button type="submit" id="email-btn">Email me a link</button>
+    </form>
+
+    <div class="auth-msg" id="auth-msg"></div>
+
+    <div class="auth-footer">
+      We only store your email and your tracker progress. We'll never spam you. You can delete your account any time — just email me.
+    </div>
+  </div>
+</div>
 </body>
 </html>

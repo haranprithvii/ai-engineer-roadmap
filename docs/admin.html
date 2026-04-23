@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — AI Engineer Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script>
+window.ROADMAP_CONFIG = {
+  SUPABASE_URL: "",
+  SUPABASE_ANON_KEY: "",
+  ADMIN_EMAIL: ""
+};
+</script>
+<style>
+  :root {
+    --bg: #0a0e14;
+    --bg-panel: #10151c;
+    --bg-raised: #161d27;
+    --ink: #e8ecf2;
+    --ink-dim: #7a8898;
+    --ink-faint: #3e4858;
+    --accent: #ff4d3d;
+    --mint: #5df7a4;
+    --gold: #ffbe3d;
+    --blue: #5db9f7;
+    --line: #1f2835;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-mono);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  a { color: var(--accent); text-decoration: none; }
+
+  header {
+    padding: 40px 32px 24px;
+    border-bottom: 1px solid var(--line);
+    max-width: 1400px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px;
+  }
+  .brand {
+    font-family: var(--font-display);
+    font-size: 32px; font-weight: 600;
+    font-style: italic;
+    letter-spacing: -0.02em;
+  }
+  .brand em { color: var(--accent); font-style: normal; font-weight: 700; }
+  .sub {
+    color: var(--ink-dim);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .signout {
+    padding: 8px 14px;
+    border: 1px solid var(--ink-faint);
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .signout:hover { border-color: var(--accent); color: var(--accent); }
+
+  main { max-width: 1400px; margin: 0 auto; padding: 32px; }
+
+  .login-box {
+    max-width: 440px;
+    margin: 80px auto;
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    padding: 32px;
+  }
+  .login-box h1 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+  .login-box p {
+    color: var(--ink-dim);
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  .login-box input {
+    width: 100%;
+    padding: 12px;
+    background: var(--bg);
+    border: 1px solid var(--ink-faint);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    outline: none;
+    margin-bottom: 10px;
+  }
+  .login-box input:focus { border-color: var(--accent); }
+  .login-box button {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    border: none;
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .login-box button:disabled { opacity: 0.5; }
+  .login-box .msg {
+    margin-top: 12px;
+    padding: 10px;
+    font-size: 12px;
+    border-left: 2px solid var(--mint);
+    background: rgba(93,247,164,0.06);
+    color: var(--mint);
+    display: none;
+  }
+  .login-box .msg.active { display: block; }
+  .login-box .msg.error { border-left-color: var(--accent); background: rgba(255,77,61,0.1); color: var(--accent); }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .stat-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    padding: 20px;
+  }
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 8px;
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-num.accent { color: var(--accent); }
+  .stat-num.mint { color: var(--mint); }
+  .stat-num.gold { color: var(--gold); }
+  .stat-num.blue { color: var(--blue); }
+  .stat-delta {
+    font-size: 11px;
+    color: var(--ink-dim);
+    margin-top: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .panel {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .panel h2 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 900px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+  }
+  th {
+    color: var(--ink-dim);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  td .bar {
+    display: inline-block;
+    height: 6px;
+    background: var(--accent);
+    vertical-align: middle;
+    margin-left: 8px;
+  }
+
+  canvas { max-height: 260px; }
+
+  .loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--ink-dim);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .notice {
+    background: rgba(255,190,61,0.06);
+    border-left: 2px solid var(--gold);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    color: var(--gold);
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="loading">Loading...</div>
+</div>
+
+<script>
+const cfg = window.ROADMAP_CONFIG;
+const app = document.getElementById('app');
+
+if (!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY) {
+  app.innerHTML = `
+    <div class="login-box" style="margin-top:120px;">
+      <h1>Setup required</h1>
+      <p>This admin dashboard is not yet configured. Open <code style="color:var(--mint);">docs/admin.html</code> and set your Supabase URL, anon key, and admin email at the top of the file.</p>
+      <p style="margin-top:16px;">See <a href="https://github.com/haranprithvii/ai-engineer-roadmap/blob/main/SETUP-AUTH.md">SETUP-AUTH.md</a> for step-by-step instructions.</p>
+    </div>
+  `;
+} else {
+  const sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+
+  sb.auth.getSession().then(({ data: { session } }) => {
+    if (session && session.user && session.user.email === cfg.ADMIN_EMAIL) {
+      renderDashboard(sb, session.user);
+    } else {
+      renderLogin(sb);
+    }
+  });
+
+  sb.auth.onAuthStateChange((_e, session) => {
+    if (session && session.user && session.user.email === cfg.ADMIN_EMAIL) {
+      renderDashboard(sb, session.user);
+    }
+  });
+}
+
+function renderLogin(sb) {
+  app.innerHTML = `
+    <div class="login-box">
+      <h1>Admin login</h1>
+      <p>Enter your admin email. A magic link will be sent.</p>
+      <form id="login-form">
+        <input type="email" id="login-email" placeholder="admin@you.com" required>
+        <button type="submit" id="login-btn">Send magic link</button>
+      </form>
+      <div class="msg" id="login-msg"></div>
+      <p style="margin-top:20px;font-size:11px;color:var(--ink-faint);">
+        Only the email set as ADMIN_EMAIL in admin.html can access this page.
+      </p>
+    </div>
+  `;
+  document.getElementById('login-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value.trim();
+    const btn = document.getElementById('login-btn');
+    const msg = document.getElementById('login-msg');
+    btn.disabled = true; btn.textContent = 'Sending...';
+    const { error } = await sb.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: window.location.href }
+    });
+    msg.classList.add('active');
+    if (error) {
+      msg.classList.add('error');
+      msg.textContent = error.message;
+      btn.disabled = false; btn.textContent = 'Send magic link';
+    } else {
+      msg.classList.remove('error');
+      msg.textContent = `Check ${email} for a sign-in link.`;
+      btn.textContent = 'Sent ✓';
+    }
+  };
+}
+
+async function renderDashboard(sb, user) {
+  app.innerHTML = `
+    <header>
+      <div>
+        <div class="brand"><em>Admin</em> · AI Engineer Roadmap</div>
+        <div class="sub">${user.email} · Signed in</div>
+      </div>
+      <button class="signout" id="signout-btn">Sign out</button>
+    </header>
+    <main>
+      <div class="loading">Fetching data...</div>
+    </main>
+  `;
+  document.getElementById('signout-btn').onclick = async () => {
+    await sb.auth.signOut();
+    window.location.reload();
+  };
+
+  const main = document.querySelector('main');
+  try {
+    // Fetch aggregate data
+    const [usersRes, progressRes, eventsRes] = await Promise.all([
+      sb.from('profiles').select('id, email, created_at').order('created_at', { ascending: false }),
+      sb.from('progress').select('user_id, state, updated_at'),
+      sb.from('events').select('event_type, path, created_at, meta').order('created_at', { ascending: false }).limit(500)
+    ]);
+
+    const users = usersRes.data || [];
+    const progress = progressRes.data || [];
+    const events = eventsRes.data || [];
+
+    // Compute stats
+    const totalUsers = users.length;
+    const today = new Date(); today.setHours(0,0,0,0);
+    const weekAgo = new Date(today); weekAgo.setDate(weekAgo.getDate() - 7);
+
+    const newThisWeek = users.filter(u => new Date(u.created_at) >= weekAgo).length;
+    const pageviews = events.filter(e => e.event_type === 'pageview').length;
+    const pageviewsToday = events.filter(e => e.event_type === 'pageview' && new Date(e.created_at) >= today).length;
+
+    // Active users: had any event in last 7 days
+    const recentUserIds = new Set(
+      events.filter(e => new Date(e.created_at) >= weekAgo)
+            .map(e => e.meta && e.meta.user_id).filter(Boolean)
+    );
+    const activeUsers = recentUserIds.size;
+
+    // Task completion counts per phase
+    const phaseCount = {};
+    progress.forEach(p => {
+      Object.entries(p.state || {}).forEach(([k, v]) => {
+        if (v === true) {
+          const m = k.match(/^p(\d+)/);
+          if (m) {
+            const phase = parseInt(m[1]);
+            phaseCount[phase] = (phaseCount[phase] || 0) + 1;
+          }
+        }
+      });
+    });
+
+    // Signups by day (last 30 days)
+    const byDay = {};
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(today); d.setDate(d.getDate() - i);
+      byDay[d.toISOString().slice(0, 10)] = 0;
+    }
+    users.forEach(u => {
+      const d = new Date(u.created_at).toISOString().slice(0, 10);
+      if (d in byDay) byDay[d]++;
+    });
+
+    // Phase titles for display
+    const PHASE_TITLES = {
+      0: 'Toolchain', 1: 'Python/CS', 2: 'Math', 3: 'Classical ML',
+      4: 'Deep Learning', 5: 'Transformers/LLMs', 6: 'RAG',
+      7: 'Eval/Production', 8: 'Agents/MCP', 9: 'Fine-tuning', 10: 'Capstone'
+    };
+    const maxPhase = Math.max(1, ...Object.values(phaseCount));
+
+    main.innerHTML = `
+      ${totalUsers === 0 ? '<div class="notice">No users yet. Share your site and check back!</div>' : ''}
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total users</div>
+          <div class="stat-num accent">${totalUsers}</div>
+          <div class="stat-delta">+${newThisWeek} this week</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Active (7d)</div>
+          <div class="stat-num mint">${activeUsers}</div>
+          <div class="stat-delta">of ${totalUsers} total</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pageviews (all)</div>
+          <div class="stat-num gold">${pageviews}</div>
+          <div class="stat-delta">${pageviewsToday} today</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Synced tracker</div>
+          <div class="stat-num blue">${progress.length}</div>
+          <div class="stat-delta">users with cloud progress</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="panel">
+          <h2>Signups · last 30 days</h2>
+          <canvas id="signups-chart"></canvas>
+        </div>
+        <div class="panel">
+          <h2>Phase completion funnel</h2>
+          <table>
+            <thead><tr><th>Phase</th><th>Tasks completed</th></tr></thead>
+            <tbody>
+              ${Object.keys(PHASE_TITLES).map(pid => {
+                const count = phaseCount[pid] || 0;
+                const barW = Math.round(100 * count / maxPhase);
+                return `
+                  <tr>
+                    <td>P${String(pid).padStart(2,'0')} · ${PHASE_TITLES[pid]}</td>
+                    <td>${count}<span class="bar" style="width:${barW}%;"></span></td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Recent signups</h2>
+        <table>
+          <thead><tr><th>Email</th><th>Joined</th></tr></thead>
+          <tbody>
+            ${users.slice(0, 20).map(u => `
+              <tr>
+                <td>${u.email || '(no email)'}</td>
+                <td>${new Date(u.created_at).toLocaleString()}</td>
+              </tr>
+            `).join('') || '<tr><td colspan="2" style="color:var(--ink-dim);">No signups yet.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>Recent events</h2>
+        <table>
+          <thead><tr><th>Type</th><th>Path</th><th>When</th></tr></thead>
+          <tbody>
+            ${events.slice(0, 30).map(e => `
+              <tr>
+                <td style="color:${e.event_type === 'pageview' ? 'var(--blue)' : e.event_type === 'login' ? 'var(--mint)' : 'var(--gold)'};">${e.event_type}</td>
+                <td>${e.path || '—'}</td>
+                <td>${new Date(e.created_at).toLocaleString()}</td>
+              </tr>
+            `).join('') || '<tr><td colspan="3" style="color:var(--ink-dim);">No events yet.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    // Render signups chart
+    const ctx = document.getElementById('signups-chart');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: Object.keys(byDay).map(d => d.slice(5)),
+        datasets: [{
+          label: 'New signups',
+          data: Object.values(byDay),
+          backgroundColor: '#ff4d3d',
+          borderRadius: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#7a8898', font: { size: 9 }, maxRotation: 0 }, grid: { display: false } },
+          y: { ticks: { color: '#7a8898', stepSize: 1 }, grid: { color: '#1f2835' }, beginAtZero: true }
+        }
+      }
+    });
+
+  } catch(e) {
+    console.error(e);
+    main.innerHTML = `
+      <div class="notice">Error loading data: ${e.message}<br>
+      Check that your Supabase tables exist and your admin email matches.</div>
+    `;
+  }
+}
+</script>
+
+</body>
+</html>
