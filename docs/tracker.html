@@ -16,8 +16,8 @@
 // tracker works in local-only mode (current behavior).
 // ============================================================
 window.ROADMAP_CONFIG = {
-  SUPABASE_URL: "https://zlxttfssefdknipwrulr.supabase.co",        // e.g. "https://abcdefgh.supabase.co"
-  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpseHR0ZnNzZWZka25pcHdydWxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5NTA2ODcsImV4cCI6MjA5MjUyNjY4N30.4BaD5f5RxNArEooW0wDL_hw6QEMoa2O-_sDro5AshUI",   // starts with "eyJhbGciOiJ..."
+  SUPABASE_URL: "",        // e.g. "https://abcdefgh.supabase.co"
+  SUPABASE_ANON_KEY: "",   // starts with "eyJhbGciOiJ..."
   ENABLE_ANALYTICS: true   // logs anonymous page views even without signup
 };
 </script>
@@ -428,6 +428,13 @@ window.ROADMAP_CONFIG = {
     letter-spacing: 0.05em;
   }
   .panel-body { padding: 8px 0; }
+  .panel-intro {
+    padding: 12px 18px 14px;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--ink-dim);
+    border-bottom: 1px solid var(--line);
+  }
 
   .news-cat {
     padding: 14px 18px 8px;
@@ -903,7 +910,7 @@ window.ROADMAP_CONFIG = {
           <li><span class="wf-num">132</span><span class="wf-txt"><b>Tasks across 24 weeks</b> — from Python basics to shipping a capstone.</span></li>
           <li><span class="wf-num">146</span><span class="wf-txt"><b>Curated links</b> to the best free videos, papers &amp; courses.</span></li>
           <li><span class="wf-num">10</span><span class="wf-txt"><b>Phases</b> — toolchain, math, ML, deep learning, transformers, RAG, eval, agents, fine-tuning, capstone.</span></li>
-          <li><span class="wf-num">∞</span><span class="wf-txt"><b>Stay current</b> — live sidebar links to HF papers, Raschka, Interconnects, arXiv.</span></li>
+          <li><span class="wf-num">∞</span><span class="wf-txt"><b>Stay current</b> — curated links to HF Daily Papers, Raschka, Interconnects, and 20+ more.</span></li>
         </ul>
 
         <div class="welcome-footer">
@@ -967,8 +974,12 @@ window.ROADMAP_CONFIG = {
   <aside class="right" id="app-right">
     <div class="panel">
       <div class="panel-head">
-        <span class="panel-title">↯ Stay current</span>
-        <span class="panel-sub">latest AI</span>
+        <span class="panel-title">↗ Curated sources</span>
+        <span class="panel-sub">bookmark these</span>
+      </div>
+      <div class="panel-intro">
+        The best places on the web for AI news, research, and model releases. Each
+        link opens the live site — subscribe to the ones you'll actually read.
       </div>
       <div class="panel-body">
         <div class="news-cat">Papers &amp; research</div>

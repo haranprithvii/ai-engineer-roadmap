@@ -58,12 +58,12 @@ Email magic links work out of the box. No setup needed.
 **Authentication** → **URL Configuration**.
 
 Add both of these to the "Redirect URLs" allow list:
-- `https://haranprithvii.github.io/ai-engineer-roadmap/tracker.html`
-- `https://haranprithvii.github.io/ai-engineer-roadmap/admin.html`
+- `https://ailearningroadmap.prithviharan.com/tracker.html`
+- `https://ailearningroadmap.prithviharan.com/admin.html`
 
 Also add `http://localhost:*` if you ever want to test locally.
 
-Set the **Site URL** to: `https://haranprithvii.github.io/ai-engineer-roadmap/`
+Set the **Site URL** to: `https://ailearningroadmap.prithviharan.com/`
 
 ## 5. Grab your credentials
 
@@ -137,7 +137,7 @@ Wait ~60 seconds for GitHub Pages to rebuild.
 2. Click **☁ Sync progress** (top right of toolbar).
 3. Try each sign-in method. Magic link is slowest (email delivery).
 4. Check a task, reload the page — your progress should be preserved.
-5. Open `https://haranprithvii.github.io/ai-engineer-roadmap/admin.html` and sign in with your admin email. You should see yourself in the users table.
+5. Open `https://ailearningroadmap.prithviharan.com/admin.html` and sign in with your admin email. You should see yourself in the users table.
 
 ## Troubleshooting
 

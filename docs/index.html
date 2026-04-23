@@ -482,6 +482,204 @@
     .graph-viz { max-width: 480px; margin: 0 auto; }
   }
 
+  /* Story section */
+  .story-sec { padding-bottom: 80px; }
+  .story-body {
+    max-width: 720px;
+    font-size: 17px;
+    line-height: 1.8;
+    color: var(--ink-dim);
+  }
+  .story-body p { margin-bottom: 20px; }
+  .story-body p:last-of-type { margin-bottom: 0; }
+  .story-body strong { color: var(--ink); font-weight: 600; }
+  .story-body em { color: var(--accent); font-style: italic; }
+  .story-body a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,77,61,0.3);
+    transition: border-color 0.15s;
+  }
+  .story-body a:hover { border-bottom-color: var(--accent); }
+  .story-sign {
+    margin-top: 32px !important;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink);
+  }
+
+  /* Why section */
+  .why-sec { padding-bottom: 80px; }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .why-card {
+    padding: 28px;
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    transition: border-color 0.2s;
+  }
+  .why-card:hover { border-color: var(--accent); }
+  .why-num {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .why-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+  .why-body {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink-dim);
+  }
+  .why-body em { color: var(--accent); font-style: italic; }
+
+  /* How it works section */
+  .how-sec { padding-bottom: 80px; }
+  .how-intro {
+    max-width: 720px;
+    margin-bottom: 40px;
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--ink-dim);
+  }
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .how-card {
+    padding: 28px;
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    transition: border-color 0.2s;
+  }
+  .how-card:hover { border-color: var(--mint); }
+  .how-card-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .how-num {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--mint);
+    line-height: 1;
+  }
+  .how-lab {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--ink-dim);
+  }
+  .how-title {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+    line-height: 1.35;
+  }
+  .how-body {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink-dim);
+  }
+
+  /* Who it's for section */
+  .forwho-sec { padding-bottom: 80px; }
+  .forwho-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 800px) {
+    .forwho-grid { grid-template-columns: 1fr; }
+  }
+  .forwho-col {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    padding: 28px;
+  }
+  .forwho-head {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .forwho-head.mint { color: var(--mint); }
+  .forwho-head.accent { color: var(--accent); }
+  .forwho-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .forwho-list li {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+    padding-left: 24px;
+    position: relative;
+  }
+  .forwho-list li em { color: var(--accent); font-style: italic; }
+  .forwho-list.good li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 7px;
+    width: 10px; height: 10px;
+    background: var(--mint);
+    transform: rotate(45deg);
+  }
+  .forwho-list.bad li::before {
+    content: '\00d7';
+    position: absolute;
+    left: 0; top: -2px;
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .forwho-footer {
+    padding: 24px 28px;
+    background: var(--bg-panel);
+    border-left: 2px solid var(--accent);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink-dim);
+  }
+  .forwho-footer strong {
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
   /* CTA */
   .cta-sec {
     text-align: center;
@@ -538,10 +736,10 @@
   <div class="nav-inner">
     <div class="nav-brand">ai engineer<span class="dot">.</span>rm</div>
     <div class="nav-links">
+      <a href="#why">Why</a>
       <a href="#roadmap">Roadmap</a>
-      <a href="#what">What's inside</a>
       <a href="#graph">Graph</a>
-      <a href="#rules">Rules</a>
+      <a href="#how-it-works">How it works</a>
       <a href="tracker.html" class="nav-cta">Open tracker →</a>
     </div>
   </div>
@@ -551,23 +749,24 @@
   <div class="hero-tag">A 24-week self-study curriculum · fully free</div>
 
   <h1>
-    Become an<br>
-    <span class="accent">AI engineer</span><br>
-    from <span class="underline">scratch.</span>
+    From Python basics to a<br>
+    <span class="accent">shipped LLM agent.</span><br>
+    In <span class="underline">24 weeks.</span>
   </h1>
 
   <p class="hero-sub">
-    No bootcamps. No $3,000 courses. Just the <em>best free resources</em>
-    on the internet, sequenced correctly, with a knowledge graph to tie
-    every concept together.
+    5–8 hours a week, nights and weekends. The best free resources on the
+    internet, <em>sequenced in the order they actually make sense</em>, with
+    a knowledge graph that connects every concept. Built by someone learning
+    this alongside you.
   </p>
 
   <div class="hero-ctas">
     <a href="tracker.html" class="btn btn-primary">
       Start week 0 <span class="arrow">→</span>
     </a>
-    <a href="#roadmap" class="btn btn-ghost">
-      See the roadmap <span class="arrow">↓</span>
+    <a href="#why" class="btn btn-ghost">
+      Why this roadmap <span class="arrow">↓</span>
     </a>
   </div>
 
@@ -577,16 +776,16 @@
       <div class="meta-lab">weeks</div>
     </div>
     <div class="meta-cell">
-      <div class="meta-num mint">10</div>
-      <div class="meta-lab">phases</div>
+      <div class="meta-num mint">132</div>
+      <div class="meta-lab">tasks</div>
     </div>
     <div class="meta-cell">
-      <div class="meta-num gold">175+</div>
-      <div class="meta-lab">concept notes</div>
+      <div class="meta-num gold">146</div>
+      <div class="meta-lab">curated links</div>
     </div>
     <div class="meta-cell">
       <div class="meta-num">21</div>
-      <div class="meta-lab">projects shipped</div>
+      <div class="meta-lab">projects to ship</div>
     </div>
     <div class="meta-cell">
       <div class="meta-num">$0</div>
@@ -595,9 +794,122 @@
   </div>
 </div>
 
+<section id="story" class="story-sec">
+  <div class="section-head">
+    <span class="section-num">00 / WHY THIS EXISTS</span>
+    <h2>I built this for <em>myself</em>, first.</h2>
+  </div>
+
+  <div class="story-body">
+    <p>
+      I'm <a href="https://prithviharan.com" target="_blank" rel="noopener">Haran</a>,
+      and I'm rebuilding my AI engineering skills from the ground up — not
+      because I have to, but because I want to understand the whole stack, not
+      just the parts I use at work.
+    </p>
+
+    <p>
+      I started the usual way: a few Coursera courses, a half-finished book, a
+      bookmarks folder with 200 links I'd never click again. I realized the
+      problem wasn't missing resources — <strong>the best stuff in AI is free.</strong>
+      Karpathy's videos. 3Blue1Brown. Lilian Weng's essays. The original
+      transformer paper. It's all out there.
+    </p>
+
+    <p>
+      The problem was <em>sequencing</em>. I didn't know what to learn first,
+      what to skip, or when I was ready to move on. So I designed the path I
+      wish I'd had when I started: 24 weeks, 10 phases, every task linked to
+      the right free resource, everything cross-referenced in a knowledge
+      graph I could open in Obsidian.
+    </p>
+
+    <p>
+      I'm sharing it with a small group of friends first to see if it's
+      actually useful. If you're reading this, you're one of them — thanks for
+      trying it out. <strong>I'd love your honest feedback:</strong> what
+      worked, what didn't, what's missing, what felt like a waste of time.
+    </p>
+
+    <p class="story-sign">— Haran · <a href="mailto:haran.prithvii@gmail.com">haran.prithvii@gmail.com</a></p>
+  </div>
+</section>
+
+<section id="why" class="why-sec">
+  <div class="section-head">
+    <span class="section-num">01 / WHY THIS ROADMAP</span>
+    <h2>There are 50 AI roadmaps on GitHub. <em>Here's what's different.</em></h2>
+  </div>
+
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-num">01</div>
+      <div class="why-title">Sequenced for the part-time learner.</div>
+      <div class="why-body">
+        Most roadmaps assume you're studying full-time. This one is built for
+        5–8 hours a week, nights and weekends. Each week has a realistic scope
+        — you won't fall behind, you won't burn out.
+      </div>
+    </div>
+
+    <div class="why-card">
+      <div class="why-num">02</div>
+      <div class="why-title">Every link is vetted, not just listed.</div>
+      <div class="why-body">
+        146 resources, all free, all checked. Karpathy's Zero-to-Hero, the
+        Attention paper, Lilian Weng's surveys, Hamel's evals essay — the
+        stuff that <em>actually</em> teaches you, not just the stuff that
+        shows up first on Google.
+      </div>
+    </div>
+
+    <div class="why-card">
+      <div class="why-num">03</div>
+      <div class="why-title">Concepts are linked, not siloed.</div>
+      <div class="why-body">
+        175+ concept notes in Obsidian, all cross-referenced. When you're
+        reading about attention, you can jump to the tokens it acts on, the
+        backprop that trained it, the LoRA that fine-tunes it. One keyboard
+        shortcut shows the whole graph.
+      </div>
+    </div>
+
+    <div class="why-card">
+      <div class="why-num">04</div>
+      <div class="why-title">You ship, you don't just study.</div>
+      <div class="why-body">
+        21 projects across the 24 weeks — from a scratch-built MLP to a
+        production RAG agent with evals. By week 24 you have a GitHub full of
+        real work, not just completion certificates.
+      </div>
+    </div>
+
+    <div class="why-card">
+      <div class="why-num">05</div>
+      <div class="why-title">Built to stay current.</div>
+      <div class="why-body">
+        The tracker has a curated sidebar of the sources that working AI
+        engineers actually read — Raschka, Interconnects, HF Daily Papers,
+        Artificial Analysis, Simon Willison. One click, their latest content
+        in a new tab.
+      </div>
+    </div>
+
+    <div class="why-card">
+      <div class="why-num">06</div>
+      <div class="why-title">Honest about what it isn't.</div>
+      <div class="why-body">
+        This won't make you a research scientist. It won't replace a PhD. What
+        it will do: get you to where you can read a paper, build with an LLM,
+        and hold your own in a technical AI interview.
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="roadmap">
   <div class="section-head">
-    <span class="section-num">01 / ROADMAP</span>
+    <span class="section-num">02 / ROADMAP</span>
     <h2>From linear algebra to <em>shipped agent</em>.</h2>
   </div>
 
@@ -679,7 +991,7 @@
 
 <section id="what">
   <div class="section-head">
-    <span class="section-num">02 / WHAT'S INSIDE</span>
+    <span class="section-num">03 / WHAT'S INSIDE</span>
     <h2>Four things. <em>All free.</em></h2>
   </div>
 
@@ -719,7 +1031,7 @@
 
 <section class="rules" id="rules">
   <div class="section-head">
-    <span class="section-num">03 / GOLDEN RULES</span>
+    <span class="section-num">04 / GOLDEN RULES</span>
     <h2>Four rules. <em>Non-negotiable.</em></h2>
   </div>
 
@@ -741,7 +1053,7 @@
 
 <section id="graph" class="graph-sec">
   <div class="section-head">
-    <span class="section-num">04 / KNOWLEDGE GRAPH</span>
+    <span class="section-num">05 / KNOWLEDGE GRAPH</span>
     <h2>Every concept, <em>connected.</em></h2>
   </div>
 
@@ -841,6 +1153,119 @@
         </g>
       </svg>
     </div>
+  </div>
+</section>
+
+<section id="how-it-works" class="how-sec">
+  <div class="section-head">
+    <span class="section-num">06 / HOW IT WORKS</span>
+    <h2>One platform: <em>study, track, stay current.</em></h2>
+  </div>
+
+  <div class="how-intro">
+    <p>
+      The tracker isn't just a to-do list — it's a study environment. Every
+      task has the right resource linked inside it. No tab-switching, no
+      bookmarks folder, no hunting. Sign in once and your progress syncs
+      everywhere.
+    </p>
+  </div>
+
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-card-head">
+        <span class="how-num">01</span>
+        <span class="how-lab">THE ROADMAP</span>
+      </div>
+      <div class="how-title">132 tasks, sequenced across 24 weeks.</div>
+      <div class="how-body">
+        Ten phases, from "install Python" to "ship a production agent." Click
+        any task to expand it — the video, paper, or doc you need is right
+        there. Check it off when you're done. Your progress bar fills as the
+        phase completes.
+      </div>
+    </div>
+
+    <div class="how-card">
+      <div class="how-card-head">
+        <span class="how-num">02</span>
+        <span class="how-lab">THE LIBRARY</span>
+      </div>
+      <div class="how-title">Every resource, in one place.</div>
+      <div class="how-body">
+        Sometimes you want to browse rather than follow the roadmap. The
+        Library tab flattens all 146 resources into one grid, grouped by type:
+        videos, papers, courses, essays, and build tools.
+      </div>
+    </div>
+
+    <div class="how-card">
+      <div class="how-card-head">
+        <span class="how-num">03</span>
+        <span class="how-lab">THE PROJECTS</span>
+      </div>
+      <div class="how-title">21 things you'll actually build.</div>
+      <div class="how-body">
+        From a scratch-built MLP on MNIST to a production RAG system with
+        evals. Each project has the tools pre-linked — Kaggle datasets, HF
+        models, the right libraries. You don't waste time on setup.
+      </div>
+    </div>
+
+    <div class="how-card">
+      <div class="how-card-head">
+        <span class="how-num">04</span>
+        <span class="how-lab">STAY CURRENT</span>
+      </div>
+      <div class="how-title">Curated sources, always in view.</div>
+      <div class="how-body">
+        The right side of the tracker is a launchpad to the best AI sources:
+        HF Daily Papers, Sebastian Raschka, Nathan Lambert, Lilian Weng,
+        Artificial Analysis, LMSys Arena. Each link opens the live site in a
+        new tab — bookmark the ones you'll actually read.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="for-who" class="forwho-sec">
+  <div class="section-head">
+    <span class="section-num">07 / WHO IT'S FOR</span>
+    <h2>Is this <em>actually</em> for you?</h2>
+  </div>
+
+  <div class="forwho-grid">
+    <div class="forwho-col">
+      <div class="forwho-head mint">You'll get value from this if…</div>
+      <ul class="forwho-list good">
+        <li>You're a working engineer or CS student who wants to move into AI.</li>
+        <li>You've touched Python before but are new to ML/DL fundamentals.</li>
+        <li>You have 5–8 hours a week, nights and weekends, consistently.</li>
+        <li>You learn better from doing than from watching — you want to ship code.</li>
+        <li>You want to understand <em>how</em> things work, not just call APIs.</li>
+        <li>You're okay reading a paper every now and then.</li>
+      </ul>
+    </div>
+
+    <div class="forwho-col">
+      <div class="forwho-head accent">You should probably skip this if…</div>
+      <ul class="forwho-list bad">
+        <li>You're looking for a quick "build an AI app this weekend" shortcut.</li>
+        <li>You already work as an ML engineer — this will be too basic for weeks 1–10.</li>
+        <li>You want a credential or certificate at the end. (There isn't one.)</li>
+        <li>You prefer structured, synchronous, taught-by-a-human learning.</li>
+        <li>You want to do research. This is an <em>engineering</em> path, not an ML research path.</li>
+        <li>You can't commit to at least 3 months. The value compounds — week 1 alone won't change your life.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="forwho-footer">
+    <strong>Still unsure?</strong> Open the tracker, glance at Phase 0 and
+    Phase 5 (Transformers &amp; LLMs). If the Phase 5 resources look
+    interesting but above your current level, this roadmap is probably right
+    for you — Phase 0 starts where you are, and the path is designed to get
+    you to Phase 5 and beyond.
   </div>
 </section>
 
