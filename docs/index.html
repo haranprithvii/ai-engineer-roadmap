@@ -61,8 +61,31 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
-  .nav-brand { font-family: var(--font-display); font-size: 16px; font-weight: 700; font-style: italic; letter-spacing: -0.01em; text-transform: none; color: var(--ink); }
+  .nav-brand { font-family: var(--font-display); font-size: 16px; font-weight: 700; font-style: italic; letter-spacing: -0.01em; text-transform: none; color: var(--ink); display: flex; align-items: baseline; }
   .nav-brand .dot { color: var(--accent); }
+  .nav-byline {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--ink-dim);
+    letter-spacing: 0.05em;
+    margin-left: 10px;
+    padding-left: 12px;
+    border-left: 1px solid var(--line);
+  }
+  .nav-byline a {
+    color: var(--ink-dim);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: all 0.15s;
+  }
+  .nav-byline a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  @media (max-width: 700px) {
+    .nav-byline { display: none; }
+  }
   .nav-links { display: flex; gap: 28px; }
   .nav-links a { color: var(--ink-dim); text-decoration: none; transition: color 0.15s; }
   .nav-links a:hover { color: var(--accent); }
@@ -734,7 +757,10 @@
 
 <nav>
   <div class="nav-inner">
-    <div class="nav-brand">ai engineer<span class="dot">.</span>rm</div>
+    <div class="nav-brand">
+      ai engineer<span class="dot">.</span>rm
+      <span class="nav-byline">by <a href="https://www.prithviharan.com" target="_blank" rel="noopener">Haran</a></span>
+    </div>
     <div class="nav-links">
       <a href="#why">Why</a>
       <a href="#roadmap">Roadmap</a>

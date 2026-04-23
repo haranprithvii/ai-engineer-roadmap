@@ -315,8 +315,10 @@ async function renderDashboard(sb, user) {
   app.innerHTML = `
     <header>
       <div>
-        <div class="brand"><em>Admin</em> · AI Engineer Roadmap</div>
-        <div class="sub">${user.email} · Signed in</div>
+        <a href="index.html" style="text-decoration:none;color:inherit;">
+          <div class="brand"><em>Admin</em> · AI Engineer Roadmap</div>
+        </a>
+        <div class="sub">${user.email} · Signed in · <a href="tracker.html" style="color:var(--accent);text-decoration:none;">Open tracker ↗</a></div>
       </div>
       <button class="signout" id="signout-btn">Sign out</button>
     </header>

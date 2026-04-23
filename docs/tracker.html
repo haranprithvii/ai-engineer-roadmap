@@ -16,8 +16,8 @@
 // tracker works in local-only mode (current behavior).
 // ============================================================
 window.ROADMAP_CONFIG = {
-  SUPABASE_URL: "",        // e.g. "https://abcdefgh.supabase.co"
-  SUPABASE_ANON_KEY: "",   // starts with "eyJhbGciOiJ..."
+  SUPABASE_URL: "https://zlxttfssefdknipwrulr.supabase.co",
+  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpseHR0ZnNzZWZka25pcHdydWxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5NTA2ODcsImV4cCI6MjA5MjUyNjY4N30.4BaD5f5RxNArEooW0wDL_hw6QEMoa2O-_sDro5AshUI",   // starts with "eyJhbGciOiJ..."
   ENABLE_ANALYTICS: true   // logs anonymous page views even without signup
 };
 </script>
@@ -93,6 +93,31 @@ window.ROADMAP_CONFIG = {
     text-transform: uppercase;
     margin-top: 10px;
   }
+  .brand-link {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+    transition: opacity 0.15s;
+  }
+  .brand-link:hover { opacity: 0.85; }
+  .subtitle-link {
+    color: var(--ink-dim);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid transparent;
+    transition: all 0.15s;
+  }
+  .subtitle-link:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .footer-link {
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    transition: opacity 0.15s;
+  }
+  .footer-link:hover { opacity: 0.75; }
   .stats { display: flex; gap: 28px; }
   .stat { display: flex; flex-direction: column; gap: 4px; }
   .stat-val {
@@ -877,8 +902,10 @@ window.ROADMAP_CONFIG = {
 <header>
   <div class="topbar">
     <div>
-      <div class="brand"><span class="ai">AI</span> engineer <span class="rm">roadmap</span></div>
-      <div class="subtitle">STUDY &middot; TRACK &middot; STAY CURRENT &middot; ALL IN ONE</div>
+      <a href="index.html" class="brand-link" title="Back to home">
+        <div class="brand"><span class="ai">AI</span> engineer <span class="rm">roadmap</span></div>
+      </a>
+      <div class="subtitle">STUDY &middot; TRACK &middot; STAY CURRENT &middot; <a href="https://www.prithviharan.com" target="_blank" rel="noopener" class="subtitle-link">BY HARAN ↗</a></div>
     </div>
     <div class="stats">
       <div class="stat"><span class="stat-val accent" id="stat-tasks">0</span><span class="stat-lab">done</span></div>
@@ -1084,8 +1111,11 @@ window.ROADMAP_CONFIG = {
 </main>
 
 <footer>
-  <div>AI ENGINEER ROADMAP · PROGRESS PERSISTS LOCALLY · MIT</div>
-  <div>ONE PLATFORM: STUDY · TRACK · STAY CURRENT</div>
+  <div>AI ENGINEER ROADMAP · MIT LICENSE</div>
+  <div>
+    BUILT BY <a href="https://www.prithviharan.com" target="_blank" rel="noopener" class="footer-link">HARAN PRITHVI ↗</a> ·
+    <a href="mailto:haran.prithvii@gmail.com" class="footer-link">SAY HELLO</a>
+  </div>
 </footer>
 
 <script>
